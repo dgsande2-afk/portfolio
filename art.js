@@ -4,7 +4,8 @@
   const colors = ['#7fd8ff', '#2bb3a3', '#f28c28', '#e4457a', '#a99bff', '#f5d547'];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const dpr = Math.min(devicePixelRatio || 1, 2);
-  let W, H, drops = [], ripples = [], bits = [];
+  const MAX_SOURCES = 25;
+  let W, H, sources = [], drops = [], ripples = [], bits = [];
 
   function size() {
     W = innerWidth; H = innerHeight;
@@ -17,16 +18,21 @@
   const rnd = (a, b) => a + Math.random() * (b - a);
   const pick = a => a[Math.floor(Math.random() * a.length)];
 
-  function addDrop(px, py) {
-    const color = pick(colors);
-    const d = { x: px, y: py, cy: -60, r: rnd(5, 11), color: color, t0: performance.now(), dur: rnd(380, 560) };
-    if (reduce) { splash(d, performance.now()); return; }
+  function spawnDrop(px, py, now) {
+    const d = { x: px, y: py, cy: -60, r: rnd(5, 11), color: pick(colors), t0: now, dur: rnd(380, 560) };
+    if (reduce) { splash(d, now); return; }
     drops.push(d);
   }
 
+  function addSource(px, py) {
+    const now = performance.now();
+    sources.push({ x: px, y: py, next: now + rnd(1500, 2600) });
+    if (sources.length > MAX_SOURCES) sources.shift();
+    spawnDrop(px, py, now);
+  }
+
   function splash(d, now) {
-    const maxR = rnd(50, 130);
-    ripples.push({ x: d.x, y: d.y, t0: now, color: d.color, rings: Math.floor(rnd(2, 5)), maxR: maxR });
+    ripples.push({ x: d.x, y: d.y, t0: now, color: d.color, rings: Math.floor(rnd(2, 5)), maxR: rnd(50, 130) });
     const n = Math.floor(rnd(6, 10));
     for (let i = 0; i < n; i++) {
       const a = rnd(Math.PI * 1.1, Math.PI * 1.9);
@@ -47,6 +53,13 @@
 
   function frame(now) {
     x.clearRect(0, 0, W, H);
+
+    sources.forEach(s => {
+      if (now >= s.next) {
+        spawnDrop(s.x, s.y, now);
+        s.next = now + rnd(1400, 2600);
+      }
+    });
 
     drops = drops.filter(d => {
       const t = Math.min((now - d.t0) / d.dur, 1);
@@ -94,12 +107,12 @@
 
   c.addEventListener('pointerdown', e => {
     const rc = c.getBoundingClientRect();
-    addDrop(e.clientX - rc.left, e.clientY - rc.top);
+    addSource(e.clientX - rc.left, e.clientY - rc.top);
   });
   document.getElementById('clear').addEventListener('click', () => {
-    drops = []; ripples = []; bits = [];
+    sources = []; drops = []; ripples = []; bits = [];
   });
 
-  setTimeout(() => addDrop(W * 0.7, H * 0.45), 400);
+  setTimeout(() => addSource(W * 0.7, H * 0.45), 400);
   requestAnimationFrame(frame);
 })();
