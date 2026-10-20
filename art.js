@@ -1,44 +1,105 @@
-(function(){
-const c=document.getElementById('art'),x=c.getContext('2d');
-const cols=['#e4457a','#f28c28','#2bb3a3','#f5d547','#8a6cff','#ff7a6b'];
-let W,H,blooms=[],dpr=Math.min(devicePixelRatio||1,2);
-const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function size(){W=innerWidth;H=innerHeight;c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0)}
-size();addEventListener('resize',size);
-const r=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
-function add(px,py){
-  const shape=pick(['round','pointed','star','spike']);
-  blooms.push({x:px,y:py,t:0,petals:Math.floor(r(5,12)),size:r(40,110),
-    c1:pick(cols),c2:pick(cols),shape,rot:r(0,6.28),spin:r(-.004,.004),stem:r(60,200)});
-}
-function petal(b,len,w,i,n,col){
-  const a=b.rot+i/n*6.283;x.save();x.rotate(a);x.fillStyle=col;x.beginPath();
-  if(b.shape==='round'){x.ellipse(len/2,0,len/2,w,0,0,6.283)}
-  else if(b.shape==='pointed'){x.moveTo(0,0);x.quadraticCurveTo(len*.5,-w*1.6,len,0);x.quadraticCurveTo(len*.5,w*1.6,0,0)}
-  else if(b.shape==='star'){x.moveTo(0,-w*.3);x.lineTo(len,0);x.lineTo(0,w*.3)}
-  else{x.rect(0,-w*.25,len,w*.5)}
-  x.fill();x.restore();
-}
-function draw(){
-  x.clearRect(0,0,W,H);
-  blooms.forEach(b=>{
-    b.t=Math.min(b.t+(reduce?1:.04),1);b.rot+=reduce?0:b.spin;
-    const e=1-Math.pow(1-b.t,3),s=b.size*e;
-    x.save();x.translate(b.x,b.y);
-    x.strokeStyle='#2bb3a3';x.lineWidth=4;x.lineCap='round';
-    x.beginPath();x.moveTo(0,0);x.quadraticCurveTo(12,b.stem*e*.5,0,b.stem*e);x.stroke();
-    for(let i=0;i<b.petals;i++)petal(b,s,s*.28,i,b.petals,b.c1);
-    x.save();x.scale(.55,.55);for(let i=0;i<b.petals;i++)petal(b,s,s*.28,i+.5,b.petals,b.c2);x.restore();
-    x.fillStyle='#1d1b3a';x.beginPath();x.arc(0,0,s*.14,0,6.283);x.fill();
-    x.fillStyle='#f5d547';x.beginPath();x.arc(0,0,s*.08,0,6.283);x.fill();
-    x.restore();
+(function () {
+  const c = document.getElementById('art');
+  const x = c.getContext('2d');
+  const colors = ['#7fd8ff', '#2bb3a3', '#f28c28', '#e4457a', '#a99bff', '#f5d547'];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  let W, H, drops = [], ripples = [], bits = [];
+
+  function size() {
+    W = innerWidth; H = innerHeight;
+    c.width = W * dpr; c.height = H * dpr;
+    x.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  size();
+  addEventListener('resize', size);
+
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+
+  function addDrop(px, py) {
+    const color = pick(colors);
+    const d = { x: px, y: py, cy: -60, r: rnd(5, 11), color: color, t0: performance.now(), dur: rnd(380, 560) };
+    if (reduce) { splash(d, performance.now()); return; }
+    drops.push(d);
+  }
+
+  function splash(d, now) {
+    const maxR = rnd(50, 130);
+    ripples.push({ x: d.x, y: d.y, t0: now, color: d.color, rings: Math.floor(rnd(2, 5)), maxR: maxR });
+    const n = Math.floor(rnd(6, 10));
+    for (let i = 0; i < n; i++) {
+      const a = rnd(Math.PI * 1.1, Math.PI * 1.9);
+      const sp = rnd(1.5, 4.5);
+      bits.push({ x: d.x, y: d.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, r: rnd(1.5, 3.5), color: d.color, t0: now });
+    }
+  }
+
+  function drawTeardrop(px, py, r, color) {
+    x.fillStyle = color;
+    x.beginPath();
+    x.moveTo(px, py - r * 2.8);
+    x.bezierCurveTo(px + r * 0.2, py - r * 1.4, px + r, py - r * 0.8, px + r, py);
+    x.arc(px, py, r, 0, Math.PI);
+    x.bezierCurveTo(px - r, py - r * 0.8, px - r * 0.2, py - r * 1.4, px, py - r * 2.8);
+    x.fill();
+  }
+
+  function frame(now) {
+    x.clearRect(0, 0, W, H);
+
+    drops = drops.filter(d => {
+      const t = Math.min((now - d.t0) / d.dur, 1);
+      d.cy = -60 + (d.y + 60) * t * t;
+      if (t >= 1) { splash(d, now); return false; }
+      drawTeardrop(d.x, d.cy, d.r, d.color);
+      return true;
+    });
+
+    ripples = ripples.filter(rp => {
+      let alive = false;
+      for (let i = 0; i < rp.rings; i++) {
+        const age = (now - rp.t0 - i * 150) / 1900;
+        if (age < 0) { alive = true; continue; }
+        if (age >= 1) continue;
+        alive = true;
+        const e = 1 - Math.pow(1 - age, 3);
+        const rx = rp.maxR * e * (1 - i * 0.12);
+        x.strokeStyle = rp.color;
+        x.globalAlpha = (1 - age) * 0.9;
+        x.lineWidth = 2.5;
+        x.beginPath();
+        x.ellipse(rp.x, rp.y, rx, rx * 0.38, 0, 0, Math.PI * 2);
+        x.stroke();
+      }
+      x.globalAlpha = 1;
+      return alive;
+    });
+
+    bits = bits.filter(b => {
+      const age = (now - b.t0) / 650;
+      if (age >= 1) return false;
+      b.x += b.vx; b.y += b.vy; b.vy += 0.18;
+      x.globalAlpha = 1 - age;
+      x.fillStyle = b.color;
+      x.beginPath();
+      x.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      x.fill();
+      x.globalAlpha = 1;
+      return true;
+    });
+
+    requestAnimationFrame(frame);
+  }
+
+  c.addEventListener('pointerdown', e => {
+    const rc = c.getBoundingClientRect();
+    addDrop(e.clientX - rc.left, e.clientY - rc.top);
   });
-  requestAnimationFrame(draw);
-}
-c.addEventListener('pointerdown',e=>{
-  const rc=c.getBoundingClientRect();add(e.clientX-rc.left,e.clientY-rc.top);
-});
-document.getElementById('clear').addEventListener('click',()=>{blooms=[]});
-add(W*.7,H*.4);
-draw();
+  document.getElementById('clear').addEventListener('click', () => {
+    drops = []; ripples = []; bits = [];
+  });
+
+  setTimeout(() => addDrop(W * 0.7, H * 0.45), 400);
+  requestAnimationFrame(frame);
 })();
