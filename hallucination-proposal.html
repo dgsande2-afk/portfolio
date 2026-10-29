@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hallucination Game Proposal | Duncan Sanders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=9">
+<style>
+.wide{max-width:1100px}
+.kicker{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0 0 .6rem}
+.glitch{position:relative;font-size:clamp(2.8rem,11vw,7.5rem);font-weight:800;letter-spacing:-.03em;animation:jit 3.2s infinite steps(1)}
+@keyframes jit{0%,92%,100%{text-shadow:none}93%{text-shadow:4px 0 var(--pink),-4px 0 var(--teal)}95%{text-shadow:-6px 2px var(--orange),5px -2px var(--teal)}97%{text-shadow:3px 0 var(--pink)}}
+section{padding:3.5rem 0 1rem;border-top:1px solid #3a3763;margin-top:2rem}
+.num{font-family:"Bricolage Grotesque",sans-serif;color:var(--pink);font-size:1rem;font-weight:800;letter-spacing:.1em}
+h2{margin-top:.2rem}
+h3{font-size:1.25rem;margin:2rem 0 .6rem}
+.todo{background:rgba(245,213,71,.12);border-left:4px solid var(--gold);padding:.7rem 1rem;border-radius:6px;margin:.8rem 0;font-size:.95rem}
+.slot{position:relative;border:2px dashed #4a4680;border-radius:10px;min-height:200px;display:grid;place-items:center;text-align:center;color:var(--mute);padding:1rem;overflow:hidden;background:#24214a}
+.slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;min-height:0;border-radius:0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin:1rem 0}
+.card{background:#24214a;border-radius:12px;padding:1.1rem 1.2rem}
+.card h4{margin:0 0 .4rem;font-family:"Bricolage Grotesque",sans-serif;font-size:1.1rem;color:var(--gold)}
+.card p{margin:.3rem 0;color:var(--mute)}
+.table{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{text-align:left;padding:.7rem .8rem;border-bottom:1px solid #3a3763;vertical-align:top}
+th{color:var(--gold);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase}
+.say{border-radius:12px;padding:1rem 1.2rem;margin:.8rem 0}
+.you{background:#2d2a5c}.ai{background:#1a3b45}
+.say b{display:block;font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:1.2rem 0;padding:0;list-style:none}
+.flow li{flex:1 1 150px;background:#24214a;border-radius:12px;padding:1rem;position:relative}
+.flow li b{display:block;color:var(--teal);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase}
+.flow li:not(:last-child)::after{content:"\2192";position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:1.4rem;z-index:2}
+@media(max-width:700px){.flow li:not(:last-child)::after{content:"\2193";right:50%;top:auto;bottom:-20px;transform:translateX(50%)}.flow{gap:22px}}
+.story{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.story figcaption{font-size:.9rem}
+.swatches{display:flex;gap:8px;flex-wrap:wrap;margin:.6rem 0}
+.swatches span{width:56px;height:56px;border-radius:10px;border:1px solid #4a4680}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+</style></head>
+<body><main class="page wide">
+<a class="back" href="index.html">Back to home</a>
+
+<header>
+<p class="kicker">Hallucination / Game proposal / Week 1 / Duncan Sanders</p>
+<h1 class="glitch">ROOM 412</h1>
+<p class="lede">A clicker game set in a hotel room that starts out full of hallucinations. Every tap raises your Certainty, the room gets sharper, and the hallucinations disappear.</p>
+</header>
+
+<section id="intro">
+<span class="num">01</span><h2>The game</h2>
+<div class="slot" style="min-height:280px"><span>Night, rain on the window, a wall clock stuck at 11:58, and a single key card on the bed.<br><small>Working title: Room 412</small></span><img src="images/proposal/hero.jpg" alt="Key visual for Room 412: a hotel room at night with rain on the window" onerror="this.remove()"></div>
+<p class="lede">Working title: <b>Room 412</b></p>
+<p>Room 412 is a clicker, or incremental, game. You check into a hotel room late at night with a single key card. Tapping the card raises a number called <b>Certainty</b>, the way clicking a button raises the count in Universal Paperclips.</p>
+<p>The visual twist is that the room begins with the maximum number of hallucinated features: everything is blurred and doubled, three clocks disagree, there is an extra lamp, a door that should not be there, and a dark shape standing by the bed. Each tap makes the room a little sharper, and hallucinations disappear one by one at set Certainty levels, until the room is crisp, plain and quiet.</p>
+<p>The player is trying to become sure of what is real. The more certain they become, the less strange the room is, and the question the game asks is whether that is a good trade. It takes about three minutes, uses one interaction (tap), and is told through image, sound and silence rather than text.</p>
+</section>
+
+<section id="case-study">
+<span class="num">02</span><h2>Case study: Universal Paperclips</h2>
+<div class="cards">
+<div class="card"><h4>Game I played</h4><p><a href="https://www.decisionproblem.com/paperclips/index2.html">Universal Paperclips</a>, a free browser game released October 2017.</p></div>
+<div class="card"><h4>Creator credits</h4><p>Designed and programmed by Frank Lantz (NYU Game Center). Bennett Foddy contributed the space combat feature. Hilary Lantz helped with the math behind the growth.</p></div>
+<div class="card"><h4>Sources</h4><p><a href="https://en.wikipedia.org/wiki/Universal_Paperclips">Wikipedia overview</a><br><a href="https://blog.ycombinator.com/frank-lantz-director-of-nyus-game-center-and-creator-of-universal-paperclips">Y Combinator interview</a><br><a href="https://www.pcgamesinsider.biz/interviews-and-opinion/66271/interview-paperclips-developer-frank-lantz/">PCGamesInsider interview</a><br><a href="https://gamesbeat.com/this-clicker-game-lets-you-take-over-the-world-with-paper-clips/">GamesBeat article</a><br><a href="https://if50.substack.com/p/2017-universal-paperclips">Interactive Fiction 50 essay</a></p></div>
+</div>
+<p>I chose this game because Room 412 is built on the same core loop. Paperclips starts as plain text and numbers, and a single button grows into a system the player no longer fully controls. The creator says he was inspired by philosopher Nick Bostrom’s paperclip maximizer thought experiment and by Kittens Game, which starts simple and spirals into questions about how societies are structured.</p>
+<h3>Three meaningful moments</h3>
+<div class="cards">
+<div class="card"><h4>1. The first click</h4><p>The screen is only words and one button. Pressing it raises a counter, so the player learns the rule with no instructions. This is the model for my opening, where the first tap on the key card raises Certainty to 1.</p></div>
+<div class="card"><h4>2. Automation takes over</h4><p>After buying machines that make clips without clicking, the player’s hand matters less than the system. In Room 412 the room starts to check itself, and the number climbs while the room empties faster.</p></div>
+<div class="card"><h4>3. The scale breaks</h4><p>The game moves from a desk to the universe, and the same goal starts to feel absurd. In Room 412, the window reveals that the room you were certain about may only be a reflection.</p></div>
+</div>
+<h3>Five player-action events</h3>
+<div class="table"><table>
+<tr><th>Player action</th><th>Game response</th><th>Player understanding</th></tr>
+<tr><td>Clicks the make-paperclip button</td><td>The paperclip count rises</td><td>One button drives the whole game</td></tr>
+<tr><td>Runs out of wire and buys more</td><td>Production stops until wire is bought</td><td>Resources limit what the player can do</td></tr>
+<tr><td>Changes the price</td><td>Demand rises or falls</td><td>Small choices change the economy</td></tr>
+<tr><td>Buys automatic clip makers</td><td>Clips appear without clicking</td><td>The system can work without the player</td></tr>
+<tr><td>Spends points on new projects</td><td>New abilities and larger stages appear</td><td>The goal stays the same while the world changes</td></tr>
+</table></div>
+<h3>How tapping the key card works like clicking for a paperclip</h3>
+<p>Every part of Paperclips’ loop has a matching part in Room 412. The mechanics are the same, but what the player earns, and what it costs, is reversed: in Paperclips each click adds something to the world, and in Room 412 each tap takes a hallucination away.</p>
+<div class="table"><table>
+<tr><th>In Paperclips</th><th>In Room 412</th><th>What changes</th></tr>
+<tr><td>Click the make-paperclip button</td><td>Tap the key card</td><td>Instead of making a thing, you gain Certainty, and the room gets a little sharper.</td></tr>
+<tr><td>The paperclip count rises</td><td>The Certainty number rises</td><td>The reward looks the same, but the room visibly clears as it grows.</td></tr>
+<tr><td>Wire runs out, so you buy more</td><td>Attention runs low and the room blurs again until you pause and listen to the rain</td><td>The limit is a resource of the mind, and resting restores it.</td></tr>
+<tr><td>Set the price to change demand</td><td>Spend Certainty to dismiss one chosen hallucination early</td><td>You choose which strange thing goes first, and what you get to keep a little longer.</td></tr>
+<tr><td>Buy automatic clip makers</td><td>After Certainty 50, the room starts to sharpen itself and the number climbs on its own</td><td>Your taps matter less, and the clearing speeds up without you.</td></tr>
+<tr><td>Projects unlock bigger stages</td><td>Certainty thresholds unlock the room, then the window</td><td>Each stage removes a different kind of hallucination, so a tap means something new.</td></tr>
+<tr><td>The goal consumes the universe</td><td>The goal consumes every hallucination, leaving a plain, silent room</td><td>Reaching the goal costs the player the strangeness that made the room interesting.</td></tr>
+</table></div>
+</section>
+
+<section id="ai">
+<span class="num">03</span><h2>Critical discussion with AI</h2>
+<h3>Verified research</h3>
+<ul>
+<li>Universal Paperclips was created by Frank Lantz and announced as a free web game on 9 October 2017, with Bennett Foddy as co-programmer and Hilary Lantz helping with the math (<a href="https://en.wikipedia.org/wiki/Universal_Paperclips">Wikipedia</a>).</li>
+<li>Lantz says incremental games make abstract mathematical relationships feel concrete, and the interface is intentionally minimal, starting as only text and numbers (<a href="https://gamesbeat.com/this-clicker-game-lets-you-take-over-the-world-with-paper-clips/">GamesBeat</a>).</li>
+<li>The game draws on Nick Bostrom’s paperclip maximizer idea and on Kittens Game (<a href="https://en.wikipedia.org/wiki/Universal_Paperclips">Wikipedia</a>, <a href="https://if50.substack.com/p/2017-universal-paperclips">IF50</a>).</li>
+</ul>
+<h3>Gaps I found</h3>
+<div class="cards">
+<div class="card"><h4>Gap 1: the first games did not fit</h4><p>I first researched Samorost and Windosill, which are close to the mood, but both depend on Flash and do not run in modern browsers. Paperclips runs in a browser and shares my game’s core loop.</p></div>
+<div class="card"><h4>Gap 2: nothing connects it to hallucination</h4><p>Every source frames Paperclips around AI risk and incremental design. None mention perception or hallucination. That link is my own interpretation: a goal pursued relentlessly changes the world, and in Room 412 the goal is certainty.</p></div>
+<div class="card"><h4>Gap 3: sound is unverified</h4><p>I found no source about the game’s audio, so I make no claims about it and will design my own sound language.</p></div>
+</div>
+<h3>Selected exchange</h3>
+<div class="say you"><b>Research request</b>Research Universal Paperclips and its creators. Find primary sources and credited contributors. Separate what the creator says from interpretation. Identify what could not be verified.</div>
+<div class="say ai"><b>AI response, summarized</b>The creator sources describe the game as a study of AI goals and incremental design, citing the paperclip maximizer. I could not find any creator statement about hallucination, or about the game’s sound. Connecting it to hallucination would be an interpretation, not a documented intention.</div>
+<h3>My conclusion and design decision</h3>
+<p><b>What I learned:</b> Paperclips shows that one repeated action can carry a whole experience, and that the game gets stranger when the rules stay the same but their meaning shifts. <b>What I decided:</b> Room 412 keeps the clicker loop but reverses the reward. In Paperclips, each click adds something to the world. In Room 412, each tap raises Certainty and removes a hallucination, so the player is rewarded with a clearer, plainer, emptier room and has to decide whether that is what they wanted.</p>
+</section>
+
+<section id="narrative">
+<span class="num">04</span><h2>Narrative and concept</h2>
+<div class="two">
+<div class="card"><h4>My reading of hallucination</h4><p>Hallucination is perception that feels fully real while contradicting everything else. In Room 412 it is not a jump scare. It is a room where the clocks disagree, the lamp is doubled, and the edges will not hold still. Certainty is the only way to make it stop.</p></div>
+<div class="card"><h4>The world</h4><p>A hotel room at night, in the rain. A wall clock, a lamp, a phone, a bed and a window. At the start there are twelve hallucinated features layered on top of them.</p></div>
+<div class="card"><h4>The player’s role</h4><p>A guest who has just checked in and wants to be sure of the room. Their only power is to tap the key card, which raises Certainty and sharpens what they see.</p></div>
+<div class="card"><h4>The experience</h4><p>A calm, compulsive pull toward clarity, like squinting until the world comes into focus. By the end the room is clear and plain, and the player should wonder whether they miss the strangeness.</p></div>
+</div>
+</section>
+
+<section id="journey">
+<span class="num">05</span><h2>Interaction and player journey</h2>
+<p class="lede">One main interaction: <b>tap to raise Certainty.</b> Each tap sharpens the room, and hallucinations disappear at set levels.</p>
+<h3>The twelve hallucinated features</h3>
+<div class="table"><table>
+<tr><th>Stage</th><th>Certainty</th><th>Hallucinations that disappear</th><th>What the room looks like after</th></tr>
+<tr><td>Opening</td><td>0</td><td>None yet. All twelve are present.</td><td>Blurred, color-split, rain falling inside, objects drifting</td></tr>
+<tr><td>Stage 1: Check-in</td><td>0 to 25</td><td>1. Heavy blur<br>2. Double vision<br>3. Drifting objects<br>4. Rain falling indoors</td><td>Steady edges, one real room underneath</td></tr>
+<tr><td>Stage 2: The room</td><td>25 to 100</td><td>5. A ghost second lamp<br>6. Two extra clocks<br>7. A door that is not there<br>8. A dark figure by the bed<br>9. Whispering</td><td>Ordinary shapes: one clock, one lamp, one bed</td></tr>
+<tr><td>Stage 3: The window</td><td>100 to 200</td><td>10. The second room in the window<br>11. The clock tick drifting off-beat<br>12. A reflection that moves a beat late</td><td>Crisp, plain and silent</td></tr>
+</table></div>
+<ol class="flow">
+<li><b>Opening</b>The room is at its most hallucinated. The key card glows. The first tap shows Certainty: 1 and the blur loosens slightly.</li>
+<li><b>Stage 1: Check-in</b>Taps sharpen the picture. Blur and double vision fade, and the first four hallucinations go.</li>
+<li><b>Stage 2: The room</b>Attention runs low, so the player pauses to listen to the rain. They can spend Certainty to dismiss a chosen hallucination early, and from Certainty 50 the room starts to sharpen itself.</li>
+<li><b>Stage 3: The window</b>The room is almost clear. The last hallucinations live in the window and the reflection, and the player taps rain on the glass to clear them.</li>
+<li><b>Ending</b>The room is sharp, plain and silent. The clock strikes midnight. The player can stay, or tap the key card once more to return to the blurred room.</li>
+</ol>
+<h3>Storyboard</h3>
+<div class="story">
+<figure><div class="slot"><span>Frame 1</span><img src="images/proposal/story-1.jpg" alt="Storyboard frame 1: the room at its most hallucinated, with blur, color split, three clocks, two lamps, an extra door and a dark figure" onerror="this.remove()"></div><figcaption>Opening. Certainty 1. All twelve hallucinations are present: three clocks, two lamps, an extra door and a figure by the bed.</figcaption></figure>
+<figure><div class="slot"><span>Frame 2</span><img src="images/proposal/story-2.jpg" alt="Storyboard frame 2: the room slightly sharper, extras still present" onerror="this.remove()"></div><figcaption>Stage 1. Certainty 18. Blur and double vision are loosening, but the extra clocks, lamp and door remain.</figcaption></figure>
+<figure><div class="slot"><span>Frame 3</span><img src="images/proposal/story-3.jpg" alt="Storyboard frame 3: most hallucinations faded, one lamp and one main clock visible" onerror="this.remove()"></div><figcaption>Stage 2. Certainty 64. The ghost lamp, extra clocks and door are dissolving. Ordinary shapes are coming through.</figcaption></figure>
+<figure><div class="slot"><span>Frame 4</span><img src="images/proposal/story-4.jpg" alt="Storyboard frame 4: a crisp room with only the second room in the window left" onerror="this.remove()"></div><figcaption>Stage 3. Certainty 150. The room is crisp. Only the second room in the window is left, and rain taps clear it.</figcaption></figure>
+<figure><div class="slot"><span>Frame 5</span><img src="images/proposal/story-5.jpg" alt="Storyboard frame 5: a clear, plain, quiet room at midnight" onerror="this.remove()"></div><figcaption>Ending. Certainty 200. The room is clear, plain and silent. The player can stay, or tap again to return to the dream.</figcaption></figure>
+</div>
+</section>
+
+<section id="style">
+<span class="num">06</span><h2>Style and sound guide</h2>
+<h3>References</h3>
+<div class="cards">
+<div class="card"><h4>Universal Paperclips</h4><p>Frank Lantz. <a href="https://www.decisionproblem.com/paperclips/index2.html">Play</a></p><p>What it teaches me: starting with almost nothing on screen makes every new number and button feel important.</p></div>
+<div class="card"><h4>HER TREES : First Puzzle</h4><p>Stone. <a href="https://treespuzzle.com/play/first-puzzle/">Play</a></p><p>What it teaches me: a quiet, hand-drawn, nearly wordless room lets the player focus on objects, and objects can carry the whole mood.</p></div>
+<div class="card"><h4>My album cover project</h4><p>Kid Cudi, <i>Soundtrack 2 My Life</i>, from my portfolio.</p><p>What it teaches me: rain on glass, blur and light flares can make a night feel dreamlike without any fantasy objects.</p></div>
+</div>
+<h3>Palette</h3>
+<div class="swatches"><span style="background:#1d1b3a"></span><span style="background:#e4457a"></span><span style="background:#2bb3a3"></span><span style="background:#f28c28"></span><span style="background:#f5d547"></span></div>
+<p>Night navy, hotel-sign red, rain teal, lamp orange and clock gold. These come from my portfolio and my Hotel Clock 3D studio.</p>
+<div class="two">
+<div class="card"><h4>Visual</h4><p>Dark room, warm light. At the start, heavy blur, color-split edges, grain and drifting objects. As Certainty rises, the blur and color split shrink and the grain fades, so the room visibly sharpens. Each hallucinated object dissolves into rain and light rather than vanishing abruptly. Titles use a heavy rounded sans, and a condensed type for the clock and key card.</p></div>
+<div class="card"><h4>Interface</h4><p>No menus. A Certainty number sits in one corner and a thin Attention bar in another. One quiet line says “Check what you trust.” The key card glows when it is ready to tap.</p></div>
+<div class="card"><h4>Motion</h4><p>Slow drifts, rain ripples, focus pulls. Each tap sends a small pulse from the key card, and the picture tightens a little. Motion reduces for visitors who prefer less movement.</p></div>
+<div class="card"><h4>Audio</h4><p>At the start, whispering, rain and a clock tick that slips out of rhythm. As hallucinations disappear, each sound drops away with a soft low tone, until only silence is left in the clear room. Sound starts off, with a visible button to turn it on.</p></div>
+</div>
+</section>
+
+<section id="plan">
+<span class="num">07</span><h2>Two-week build plan</h2>
+<div class="two">
+<div class="card"><h4>Week 2: build</h4><p>Make a playable browser prototype with the clicker loop. Tapping the key card raises Certainty, and a single sharpness value driven by Certainty controls the blur, color split and grain. Add a list of twelve hallucinated elements, each with a threshold at which it dissolves, an Attention bar that depletes and refills, and the ending. Use simple shapes for the room, a rain scene, and a sound toggle with whispers, rain and the clock tick.</p></div>
+<div class="card"><h4>Week 3: test and refine</h4><p>Have at least five people play without instructions. Watch whether they understand tapping and notice the room clearing. Tune the thresholds so the game lasts about three minutes, improve the art and sound, check it on a phone and laptop, and publish the game from this portfolio.</p></div>
+</div>
+</section>
+
+<p class="next"><a href="index.html">Back to portfolio home</a></p>
+</main></body></html>
