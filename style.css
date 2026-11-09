@@ -14,6 +14,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
 .links{position:absolute;z-index:3;left:clamp(20px,4vw,56px);bottom:clamp(20px,4vw,48px);display:flex;gap:12px;flex-wrap:wrap}
 .links a{background:var(--ink);color:var(--bg);text-decoration:none;font-weight:700;padding:.8rem 1.3rem;border-radius:999px}
 .links a:hover{background:var(--gold)}
+.links a.play{background:var(--teal);color:#0e0d22}
+.links a.play:hover{background:var(--gold)}
 .hint{position:absolute;z-index:3;right:clamp(20px,4vw,56px);bottom:clamp(24px,4vw,52px);color:var(--mute);font-size:.95rem;margin:0}
 #clear{position:absolute;z-index:3;right:clamp(20px,4vw,56px);top:clamp(20px,4vw,56px);background:none;border:2px solid var(--mute);color:var(--ink);border-radius:999px;padding:.4rem 1rem;font:inherit;cursor:pointer}
 /* project pages */
@@ -29,22 +31,10 @@ h2{font-size:clamp(1.5rem,4vw,2.2rem);margin:3rem 0 1rem}
 .grid figure{margin:0}
 .next{margin:3rem 0 1rem;font-weight:700}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* mobile home layout (desktop is unchanged) */
 @media (max-width:900px){
-  .hero{
-    padding-top:76px !important;
-  }
-  .links{
-    left:0 !important;
-    right:0 !important;
-    justify-content:center !important;
-  }
-  .hint{
-    position:absolute !important;
-    left:0 !important;
-    right:0 !important;
-    bottom:calc(clamp(20px,4vw,48px) + 100px) !important;
-    max-width:none !important;
-    text-align:center !important;
-    pointer-events:none;
-  }
+  .hero{padding-top:76px}
+  .links{left:20px;right:20px;bottom:24px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .links a{text-align:center;padding:.8rem .5rem;font-size:.95rem}
+  .hint{position:absolute;left:0;right:0;bottom:176px;text-align:center;pointer-events:none}
 }
