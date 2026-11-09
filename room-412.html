@@ -34,9 +34,55 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family
 #snd{left:max(16px,env(safe-area-inset-left))}
 #rst{right:max(16px,env(safe-area-inset-right))}
 .ctl:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-#end{position:fixed;inset:0;z-index:8;display:none;place-items:center;background:rgba(246,239,226,.0);transition:background 1.6s}
-#end.on{display:grid;background:rgba(14,13,34,.55)}
-#endbox{max-width:480px;margin:16px;text-align:center;background:rgba(14,13,30,.9);padding:1.6rem;border-radius:16px}
+#end{
+  --end-hold:3s;
+  --end-fade:1.6s;
+  position:fixed;
+  inset:0;
+  z-index:8;
+  display:none;
+  place-items:center;
+  background:rgba(246,239,226,0);
+}
+
+#end.on{
+  display:grid;
+  animation:endFade var(--end-fade) ease var(--end-hold) forwards;
+}
+
+#endbox{
+  max-width:480px;
+  margin:16px;
+  text-align:center;
+  background:rgba(14,13,30,.9);
+  padding:1.6rem;
+  border-radius:16px;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(8px);
+}
+
+#end.on #endbox{
+  animation:endPrompt .4s ease
+    calc(var(--end-hold) + var(--end-fade)) forwards;
+}
+
+@keyframes endFade{
+  to{background:rgba(246,239,226,1)}
+}
+
+@keyframes endPrompt{
+  from{
+    visibility:visible;
+    opacity:0;
+    transform:translateY(8px);
+  }
+  to{
+    visibility:visible;
+    opacity:1;
+    transform:translateY(0);
+  }
+}
 #endbox h2{font-family:"Bricolage Grotesque",sans-serif;font-size:2rem;margin:0 0 .5rem}
 #endbox p{color:var(--mute);margin:.4rem 0}
 #endbox button{margin:.8rem .3rem 0;background:var(--ink);color:#1d1b3a;border:0;border-radius:99px;padding:.7rem 1.2rem;font:inherit;font-weight:700;cursor:pointer}
@@ -133,14 +179,31 @@ function scene(now){
   g.save();drift(g,1,now,amp);
   var wn=P.win,wx=wn.x-wn.w/2,wy=wn.y-wn.h/2;
   g.fillStyle='#123a4a';g.fillRect(wx,wy,wn.w,wn.h);
-  BOK.forEach(function(b){g.globalAlpha=.55;g.fillStyle=b.c;g.beginPath();g.arc(wx+b.u*wn.w,wy+b.v*wn.h,b.r*wn.w,0,6.2832);g.fill()});g.globalAlpha=1;
-  var s10=str('room2'),s12=str('late');
-  if(s10>0){g.globalAlpha=.55*s10;g.fillStyle='#3c2850';g.fillRect(wx+wn.w*.14,wy+wn.h*.52,wn.w*.26,wn.h*.38);g.fillStyle='#f5d547';g.beginPath();g.arc(wx+wn.w*.66,wy+wn.h*.45,wn.w*.1,0,6.2832);g.fill();g.fillStyle='#e4457a';g.fillRect(wx+wn.w*.55,wy+wn.h*.6,wn.w*.3,wn.h*.2);g.globalAlpha=1}
-  if(s12>0){var lag=Math.sin(now/600)*wn.w*.05;g.globalAlpha=.8*s12;g.fillStyle='#0a0a19';g.beginPath();g.arc(wx+wn.w*.78+lag,wy+wn.h*.62,wn.w*.05,0,6.2832);g.fill();rr(g,wx+wn.w*.78+lag-wn.w*.07,wy+wn.h*.68,wn.w*.14,wn.h*.3,wn.w*.04);g.fill();g.globalAlpha=1}
-  g.strokeStyle='rgba(190,230,255,.5)';g.lineWidth=2;
-  STR.forEach(function(s){var yy=((s.v+now*.0001*s.sp*3)%1)*wn.h;g.beginPath();g.moveTo(wx+s.u*wn.w,wy+yy);g.lineTo(wx+s.u*wn.w-4,wy+yy+Math.min(24,wn.h*.08));g.stroke()});
-  g.strokeStyle='#0a0a19';g.lineWidth=Math.max(6,wn.w*.025);g.strokeRect(wx,wy,wn.w,wn.h);g.beginPath();g.moveTo(wn.x,wy);g.lineTo(wn.x,wy+wn.h);g.stroke();
-  g.restore();
+g.strokeStyle='#0a0a19';
+g.lineWidth=Math.max(6,wn.w*.025);
+g.strokeRect(wx,wy,wn.w,wn.h);
+g.beginPath();
+g.moveTo(wn.x,wy);
+g.lineTo(wn.x,wy+wn.h);
+g.stroke();
+
+// Draw the lens-flare bubbles above the glass and window frame.
+BOK.forEach(function(b){
+  g.globalAlpha=.55;
+  g.fillStyle=b.c;
+  g.beginPath();
+  g.arc(
+    wx+b.u*wn.w,
+    wy+b.v*wn.h,
+    b.r*wn.w,
+    0,
+    6.2832
+  );
+  g.fill();
+});
+g.globalAlpha=1;
+
+g.restore();
   // door
   var s7=str('door');if(s7>0){g.save();drift(g,2,now,amp);var d=P.door;g.globalAlpha=.7*s7;g.fillStyle='#46325a';g.fillRect(d.x-d.w/2,d.y-d.h/2,d.w,d.h);g.strokeStyle='#f5d547';g.lineWidth=3;g.strokeRect(d.x-d.w/2,d.y-d.h/2,d.w,d.h);g.fillStyle='#f5d547';g.beginPath();g.arc(d.x+d.w*.3,d.y+d.h*.05,d.w*.06,0,6.2832);g.fill();g.restore();g.globalAlpha=1}
   // bed
